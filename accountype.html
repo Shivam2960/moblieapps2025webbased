@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Account Type</title>
-    <link rel="stylesheet" href="/style.css" type="text/css">
+    <link rel="stylesheet" href="./style.css" type="text/css">
     <style>
         .container {
             text-align: center;
@@ -30,10 +30,9 @@
 <script>
     function handleSelection(accountType) {
         localStorage.setItem('accountType', accountType);
-        const signupPage = accountType === 'Library Account' ? 'library_signup.html' : 'borrower_signup.html';
+        const signupPage = accountType === 'Library Account' ? './library_signup.html' : './borrower_signup.html';
         window.location.href = signupPage;
     }
-
 </script>
 </body>
 </html>

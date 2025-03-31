@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Add/Remove Books</title>
-    <link rel="stylesheet" href="/style.css" type="text/css">
+    <link rel="stylesheet" href="./style.css" type="text/css">
     <style>
         body {
             display: flex;
@@ -50,11 +50,11 @@
 <body>
 <div class="sidebar">
     <h2>Navigation</h2>
-    <a href="http://localhost:63342/moblieapps2025webbased/borrower-change-status.html">Add/Remove Books</a>
-    <a href="http://localhost:63342/moblieapps2025webbased/viewProfileBorrower.html">View Profile</a>
-    <a href="http://localhost:63342/moblieapps2025webbased/updateBorrower.html">Update Profile</a>
-    <a href="http://localhost:63342/moblieapps2025webbased/helpBorrower.html">Help</a>
-    <a href="http://localhost:63342/moblieapps2025webbased/logout.html">Logout</a>
+    <a href="./borrower-change-status.html">Add/Remove Books</a>
+    <a href="./viewProfileBorrower.html">View Profile</a>
+    <a href="./updateBorrower.html">Update Profile</a>
+    <a href="./helpBorrower.html">Help</a>
+    <a href="./logout.html">Logout</a>
 </div>
 <div class="main-content">
     <div class="container">
@@ -62,11 +62,11 @@
         <input type="text" id="bookTitles" placeholder="Book Title" required>
         <input id="dueDates" type="date" required>
         <button id="change">Save Changes</button>
-        <a href="http://localhost:63342/moblieapps2025webbased/display_borrwer.html">View List</a>
+        <a href="./display_borrower.html">View List</a>
         <p id="error-msg"></p>
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script type="module" src="/AddBorrowedBooks.js"></script>
+<script type="module" src="./AddBorrowedBooks.js"></script>
 </body>
 </html>

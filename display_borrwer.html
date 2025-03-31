@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Display Data</title>
-    <link rel="stylesheet" href="/style.css" type="text/css">
+    <link rel="stylesheet" href="./style.css" type="text/css">
     <style>
         body {
             display: flex;
@@ -55,26 +55,23 @@
         </style>
     </head>
     <body>
-    <div class="sidebar">
-        <h2>Navigation</h2>
-        <a href="http://localhost:63342/moblieapps2025webbased/borrower-change-status.html">Add/Remove Books</a>
-        <a href="http://localhost:63342/moblieapps2025webbased/viewProfileBorrower.html">View Profile</a>
-        <a href="http://localhost:63342/moblieapps2025webbased/updateBorrower.html">Update Profile</a>
-        <a href="http://localhost:63342/moblieapps2025webbased/helpBorrower.html">Help</a>
-        <a href="http://localhost:63342/moblieapps2025webbased/logout.html">Logout</a>
+<div class="sidebar">
+    <h2>Navigation</h2>
+    <a href="./borrower-change-status.html">Add/Remove Books</a>
+    <a href="./viewProfileBorrower.html">View Profile</a>
+    <a href="./updateBorrower.html">Update Profile</a>
+    <a href="./helpBorrower.html">Help</a>
+    <a href="./logout.html">Logout</a>
+</div>
+<div class="main-content">
+    <div class="container">
+        <h2 id="borrower-title">Hi Borrower!</h2>
+        <p id="borrowed-books"><strong>Borrowed books: </strong></p>
+        <p id="next-due"><strong>Next date a book is due is: </strong></p>
+        <p id="overdue-items"><strong>Overdue items: </strong></p>
     </div>
-
-    <div class="main-content">
-        <div class="container">
-            <h2 id="borrower-title">Hi Borrower!</h2>
-            <p id="borrowed-books"><strong>Borrowed books: </strong></p>
-
-            <p id="next-due"><strong>Next date a book is due is: </strong></p>
-            <p id="overdue-items"><strong>Overdue items: </strong></p>
-        </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script type="module" src="data_borrower.js"></script>
-    </body>
-    </html>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script type="module" src="./data_borrower.js"></script>
+</body>
+</html>

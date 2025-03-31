@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Update Profile Data</title>
-    <link rel="stylesheet" href="/style.css" type="text/css">
-    <style>
+    <link rel="stylesheet" href="./style.css" type="text/css">    <style>
         body {
             display: flex;
             margin: 0;
@@ -50,24 +49,24 @@
 <body>
 <div class="sidebar">
     <h2>Navigation</h2>
-    <a href="http://localhost:63342/moblieapps2025webbased/borrower-change-status.html">Add/Remove Books</a>
-    <a href="http://localhost:63342/moblieapps2025webbased/viewProfileBorrower.html">View Profile</a>
-    <a href="http://localhost:63342/moblieapps2025webbased/updateBorrower.html">Update Profile</a>
-    <a href="http://localhost:63342/moblieapps2025webbased/helpBorrower.html">Help</a>
-    <a href="http://localhost:63342/moblieapps2025webbased/logout.html">Logout</a>
+    <a href="./borrower-change-status.html">Add/Remove Books</a>
+    <a href="./viewProfileBorrower.html">View Profile</a>
+    <a href="./updateBorrower.html">Update Profile</a>
+    <a href="./helpBorrower.html">Help</a>
+    <a href="./logout.html">Logout</a>
 </div>
 <div class="main-content">
     <div class="container">
-        <h2>Update Data</h2>
+        <h2>Borrower Profile</h2>
         <input type="text" id="first-name" placeholder="First Name" required>
         <input type="text" id="last-name" placeholder="Last Name" required>
         <input type="text" id="city" placeholder="City" required>
         <button id="update-btn">Update Data</button>
         <p id="error-msg"></p>
-        <a href="http://localhost:63342/moblieapps2025webbased/display_borrwer.html">View List</a>
+        <a href="./display_borrower.html">View List</a>
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script type="module" src="/update.js"></script>
+<script type="module" src="./update.js"></script>
 </body>
 </html>
