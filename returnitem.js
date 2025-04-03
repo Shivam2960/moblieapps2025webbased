@@ -3,48 +3,17 @@ const supabaseURL = "https://jidvjencxztuercjskgw.supabase.co";
 const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImppZHZqZW5jeHp0dWVyY2pza2d3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjQwNzEzNTEsImV4cCI6MjAzOTY0NzM1MX0.bmWEAB5ITALaAvfQ0_0ohephLy6_O5YbLpLuTRHaeRU";
 const supabase = createClient(supabaseURL, supabaseAnonKey);
 
-// Function to format date from YYYY-MM-DD to MM-DD-YYYY
-function formatDateToMMDDYYYY(dateString) {
-    const [year, month, day] = dateString.split('-');
-    return `${month}-${day}-${year}`;
-}
-
-// Function to return an item
+// Function to return an item by title
 async function returnItem() {
-    // Debug element existence
-    const itemNameElement = document.getElementById("itemNameReturn");
-    const dueDateElement = document.getElementById("dueDateReturn");
-    const personNameElement = document.getElementById("personNameReturn");
-    const phoneNumberElement = document.getElementById("phoneNumberReturn");
-    const errorMsgElement = document.getElementById("error-msg");
+    const itemName = document.getElementById("itemNameReturn").value.trim();
+    const errorMsg = document.getElementById("error-msg");
 
-    console.log("itemNameReturn:", itemNameElement);
-    console.log("dueDateReturn:", dueDateElement);
-    console.log("personNameReturn:", personNameElement);
-    console.log("phoneNumberReturn:", phoneNumberElement);
-    console.log("error-msg:", errorMsgElement);
-
-    if (!itemNameElement || !dueDateElement || !personNameElement || !phoneNumberElement || !errorMsgElement) {
-        console.error("One or more elements not found in the DOM.");
-        return;
-    }
-
-    const itemName = itemNameElement.value.trim();
-    const dueDate = dueDateElement.value.trim();
-    const personName = personNameElement.value.trim();
-    const phoneNumber = phoneNumberElement.value.trim();
-    const errorMsg = errorMsgElement;
-
-    if (!itemName || !dueDate || !personName || !phoneNumber) {
-        errorMsg.textContent = "Please fill out all fields.";
+    if (!itemName) {
+        errorMsg.textContent = "Please enter the name of the item to return.";
         return;
     }
 
     errorMsg.textContent = ""; // Clear previous error message
-
-    // Format the due date to match borrowed_info format (MM-DD-YYYY)
-    const formattedDueDate = formatDateToMMDDYYYY(dueDate);
-    const checkoutDetails = `${itemName} By: ${personName} Due: ${formattedDueDate} PN: ${phoneNumber}`;
 
     try {
         // Get the current user's session
@@ -66,21 +35,22 @@ async function returnItem() {
         let currentBorrowedItems = data.borrowed_info || [];
         let currentInStockItems = data.In_Stock || [];
 
-        // Log for debugging
-        console.log("Constructed checkoutDetails:", checkoutDetails);
-        console.log("Current borrowed_info:", currentBorrowedItems);
+        // Find the borrowed entry that starts with the itemName
+        const borrowedEntry = currentBorrowedItems.find(entry => entry.startsWith(itemName + " By:"));
 
-        // Check if the item exists in borrowed_info
-        if (!currentBorrowedItems.includes(checkoutDetails)) {
-            errorMsg.textContent = "Error: Item not found in borrowed list.";
+        if (!borrowedEntry) {
+            errorMsg.textContent = `Error: "${itemName}" is not currently borrowed.`;
             return;
         }
 
-        // Remove the item from borrowed_info
-        currentBorrowedItems = currentBorrowedItems.filter(item => item !== checkoutDetails);
+        // Remove the borrowed entry
+        currentBorrowedItems = currentBorrowedItems.filter(entry => entry !== borrowedEntry);
 
-        // Add the item name back to In_Stock
-        currentInStockItems.push(itemName);
+        // Extract the item name from the borrowed entry
+        const itemNameFromEntry = borrowedEntry.split(" By:")[0].trim();
+
+        // Add the item back to In_Stock
+        currentInStockItems.push(itemNameFromEntry);
 
         // Update Supabase
         const { error: updateError } = await supabase
@@ -90,25 +60,22 @@ async function returnItem() {
 
         if (updateError) throw updateError;
 
-        // Clear input fields
-        itemNameElement.value = "";
-        dueDateElement.value = "";
-        personNameElement.value = "";
-        phoneNumberElement.value = "";
+        // Clear input field
+        document.getElementById("itemNameReturn").value = "";
 
-        errorMsg.textContent = "Item successfully returned!";
+        errorMsg.textContent = `"${itemNameFromEntry}" has been successfully returned!`;
     } catch (err) {
         console.error("Full error:", err);
         errorMsg.textContent = `Error: ${err.message}`;
     }
 }
 
-// Ensure DOM is loaded before attaching event listener
+// Attach event listener to button
 document.addEventListener("DOMContentLoaded", () => {
-    const returnButton = document.getElementById("returnBtn"); // Adjust this ID based on your HTML
+    const returnButton = document.getElementById("returnBtn");
     if (returnButton) {
         returnButton.addEventListener("click", returnItem);
     } else {
-        console.error("Button with ID 'returnBtn' not found in the DOM.");
+        console.error("Return button not found in DOM.");
     }
 });
