@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Profile</title>
+    <link rel="stylesheet" href="./style.css" type="text/css">
+    <style>
+        body {
+            display: flex;
+            margin: 0;
+            font-family: 'Georgia', serif;
+            background-color: #f3efe0;
+            color: #4a3c31;
+        }
+        .sidebar {
+            width: 250px;
+            background: #fff8e1;
+            color: #5d3a1a;
+            padding: 20px;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+            border-right: 1px solid #d4c5a6;
+        }
+        .sidebar h2 {
+            text-align: center;
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+        .sidebar a {
+            color: #8b5e3c;
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .sidebar a:hover {
+            background-color: #d4c5a6;
+        }
+        .main-content {
+            margin-left: 270px;
+            padding: 20px;
+            flex-grow: 1;
+        }
+    </style>
+</head>
+<body>
+<div class="sidebar">
+    <h2>Navigation</h2>
+    <a href="./additem.html">Add Item</a>
+    <a href="./removeitem.html">Remove Item</a>
+    <a href="./checkitemout.html">Check an Item Out</a>
+    <a href="./returnitem.html">Change Status to Returned</a>
+    <a href="./viewProfileLibrary.html">View Profile</a>
+    <a href="./updateLibrary.html">Update Your Profile</a>
+    <a href="./helpLibrary.html">Help</a>
+    <a href="./logout.html">Logout</a>
+</div>
+<div class="main-content">
+    <div class="container">
+        <h2>Your Profile</h2>
+        <div id="profile-data"></div>
+        <a href="./display_library.html">View List</a>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script type='module'>
+    const { createClient } = window.supabase;
+    const supabaseURL = "https://jidvjencxztuercjskgw.supabase.co";
+    const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImppZHZqZW5jeHp0dWVyY2pza2d3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjQwNzEzNTEsImV4cCI6MjAzOTY0NzM1MX0.bmWEAB5ITALaAvfQ0_0ohephLy6_O5YbLpLuTRHaeRU";
+    let supabase = createClient(supabaseURL, supabaseAnonKey);
+
+    const profileDataDiv = document.getElementById("profile-data");
+
+    async function getSession() {
+        const { data: session, error } = await supabase.auth.getSession();
+        if (error) {
+            console.error('Error fetching session:', error);
+            return null;
+        }
+        return session;
+    }
+
+    async function getUserProfile(userId) {
+        const { data: userProfile, error } = await supabase
+            .from('table2') // Replace 'table2' with your actual table name
+            .select()
+            .eq('id', userId)
+            .single();
+
+        if (error) {
+            console.error('Error fetching user data:', error);
+            return null;
+        }
+        return userProfile;
+    }
+
+    async function fetchProfile() {
+        const sessionData = await getSession();
+        if (!sessionData || !sessionData.session) {
+            console.error('No active session found.');
+            return;
+        }
+
+        const userId = sessionData.session.user.id; // Get the logged-in user's ID
+        console.log('Logged-in User ID:', userId); // Debug: Log the user ID
+
+        const userProfile = await getUserProfile(userId);
+
+        if (userProfile) {
+            console.log('User profile:', userProfile); // Debug: Log the user profile
+            profileDataDiv.innerHTML = `
+                    <p><strong>First Name:</strong> ${userProfile.firstname}</p>
+                    <p><strong>Last Name:</strong> ${userProfile.lastname}</p>
+                    <p><strong>City:</strong> ${userProfile.city}</p>
+                    <p><strong>Library Name:</strong> ${userProfile.libraryName || 'Not specified'}</p>
+                    <p><strong>Email:</strong> ${userProfile.email}</p>
+                `;
+        } else {
+            profileDataDiv.innerHTML = '<p>No profile data found for the current user.</p>';
+        }
+    }
+
+    fetchProfile().catch((error) => {
+        console.error('Error:', error);
+    });
+</script>
+</body>
+</html>
