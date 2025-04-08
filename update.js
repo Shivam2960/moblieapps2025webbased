@@ -7,7 +7,7 @@ const updateButton = document.getElementById('update-btn');
 const firstNameInput = document.getElementById('first-name');
 const lastNameInput = document.getElementById('last-name');
 const cityInput = document.getElementById('city');
-const libraryNameInput = document.getElementById('library-name'); // New input field
+const libraryNameInput = document.getElementById('library-name');
 const errorMsg = document.getElementById('error-msg');
 
 async function getSession() {
@@ -20,20 +20,55 @@ async function getSession() {
 }
 
 async function updateUserProfile(session) {
-    const userEmail = session.user.email; // Identify the user by email
+    const userEmail = session.user.email;
 
-    const updates = {
-        firstname: firstNameInput.value,
-        lastname: lastNameInput.value,
-        city: cityInput.value,
-        libraryName: libraryNameInput.value, // Add library name to update
-    };
+    // Step 1: Fetch the user's account type from 'table2'
+    const { data: userData, error: fetchError } = await supabase
+        .from('table2')
+        .select('accountType')
+        .eq('email', userEmail)
+        .single();
 
+    // Step 2: Handle errors or missing user data
+    if (fetchError) {
+        console.log('Error fetching user data: ', fetchError);
+        errorMsg.innerHTML = "Error fetching user data.";
+        return;
+    }
+    if (!userData) {
+        errorMsg.innerHTML = "User not found.";
+        return;
+    }
+
+    const accountType = userData.accountType;
+    let updates;
+
+    // Step 3: Define updates based on account type
+    if (accountType === "Borrower Account") {
+        updates = {
+            firstname: firstNameInput.value,
+            lastname: lastNameInput.value,
+            city: cityInput.value,
+        };
+    } else if (accountType === "Library Account") {
+        updates = {
+            firstname: firstNameInput.value,
+            lastname: lastNameInput.value,
+            city: cityInput.value,
+            libraryName: libraryNameInput.value,
+        };
+    } else {
+        errorMsg.innerHTML = "Invalid account type.";
+        return;
+    }
+
+    // Step 4: Perform the update
     const { data, error } = await supabase
-        .from('table2') // Ensure this matches your actual table name
+        .from('table2')
         .update(updates)
         .eq('email', userEmail);
 
+    // Step 5: Handle the update result
     if (error) {
         console.log('Error updating user data: ', error);
         errorMsg.innerHTML = "Error updating profile.";
