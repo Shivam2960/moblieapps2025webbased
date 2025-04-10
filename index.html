@@ -4,7 +4,139 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Library Website</title>
-    <link rel="stylesheet" href="style.css"> <!-- Assumes the CSS file is named styles.css -->
+    <style>
+        /* Base Styles */
+        body {
+            font-family: 'Georgia', serif;
+            background-color: #f3efe0;
+            color: #4a3c31;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            display: flex; /* Enable flexbox for centering */
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+            min-height: 100vh; /* Ensure the body takes at least the full viewport height */
+        }
+
+        /* Container Styling */
+        #library-container {
+            width: 90%;
+            max-width: 1500px; /* Increased max-width as in the original */
+            padding: 30px;
+            background-color: #fff8e1;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            border: 1px solid #d4c5a6;
+            text-align: center;
+            margin: 20px; /* Add some margin around the container */
+        }
+
+        /* Button Styles */
+        button {
+            display: block;
+            width: 90%;
+            max-width: 300px;
+            margin: 15px auto;
+            padding: 10px;
+            background-color: #8b5e3c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #714b2a;
+        }
+
+        /* Error Message */
+        #error-msg {
+            color: #a62929;
+            font-weight: bold;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+
+        /* Headings */
+        h1, h2, h3 {
+            color: #5d3a1a;
+            text-align: center;
+        }
+
+        h1 {
+            margin-top: 0;
+        }
+
+        h2 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            margin-top: 20px;
+        }
+
+        /* Links */
+        a {
+            color: #8b5e3c;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* List Styles */
+        ul {
+            list-style-type: square;
+            padding-left: 40px;
+            text-align: left;
+            display: inline-block;
+            margin-top: 5px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 5px;
+        }
+
+        /* Inputs and Form Elements */
+        input, textarea, select {
+            display: block;
+            width: 90%;
+            max-width: 300px;
+            margin: 10px auto;
+            padding: 10px;
+            border: 1px solid #d4c5a6;
+            border-radius: 5px;
+            background-color: #fffdfa;
+            font-size: 14px;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #8b5e3c;
+            box-shadow: 0 0 5px rgba(139, 94, 60, 0.5);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #4a3c31;
+            color: white;
+            font-size: 14px;
+            margin-top: 30px;
+        }
+
+        /* Logo */
+        .logo {
+            width: 80px;
+            height: auto;
+            margin-bottom: 5px;
+        }
+    </style>
 </head>
 <body>
 <div class="container" id="library-container">
