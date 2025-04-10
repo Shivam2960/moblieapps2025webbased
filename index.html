@@ -136,6 +136,18 @@
             height: auto;
             margin-bottom: 5px;
         }
+
+        /* Style for the second list to align left like the first */
+        .useful-for-list {
+            text-align: left;
+            display: inline-block;
+            padding-left: 40px; /* Added left padding to match the first list */
+        }
+
+        .useful-for-list li {
+            margin-bottom: 5px;
+            list-style-type: square; /* Ensured the bullet style matches the first list */
+        }
     </style>
 </head>
 <body>
@@ -151,7 +163,7 @@
     </ul>
 
     <h2>This website is useful if you're:</h2>
-    <ul>
+    <ul class="useful-for-list">
         <li>A researcher</li>
         <li>An avid reader</li>
         <li>A library employee</li>
