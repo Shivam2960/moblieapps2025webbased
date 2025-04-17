@@ -23,6 +23,7 @@ body {
     border-radius: 10px;
     border: 1px solid #d4c5a6; /* Subtle border */
     text-align: center;
+    font-family: 'Georgia', serif;
 }
 
 /* Button Styles */
@@ -39,10 +40,12 @@ button {
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    font-family: 'Georgia', serif;
 }
 
 button:hover {
     background-color: #714b2a; /* Slightly darker brown for hover effect */
+    font-family: 'Georgia', serif;
 }
 
 /* Error Message */
@@ -51,17 +54,20 @@ button:hover {
     font-weight: bold;
     font-size: 12px;
     margin-top: 10px;
+    font-family: 'Georgia', serif;
 }
 
 /* Headings */
 h1, h2, h3 {
     color: #5d3a1a; /* Warm dark brown */
     text-align: center;
+    font-family: 'Georgia', serif;
 }
 
 h2 {
     font-size: 20px;
     margin-bottom: 20px;
+    font-family: 'Georgia', serif;
 }
 
 /* Links */
@@ -69,24 +75,28 @@ a {
     color: #8b5e3c;
     text-decoration: none;
     font-size: 14px;
+    font-family: 'Georgia', serif;
 }
 
 a:hover {
     text-decoration: underline;
+    font-family: 'Georgia', serif;
 }
 
 /* List Styles */
 ul {
     list-style-type: square;
     padding-left: 20px;
+    font-family: 'Georgia', serif;
 }
 
 li {
     margin-bottom: 5px;
+    font-family: 'Georgia', serif;
 }
 
 /* Inputs and Form Elements */
-input, textarea, select {
+input, textarea{
     display: block;
     width: 90%;
     max-width: 300px;
@@ -96,12 +106,24 @@ input, textarea, select {
     border-radius: 5px;
     background-color: #fffdfa; /* Slightly off-white */
     font-size: 14px;
+    font-family: 'Georgia', serif;
 }
-
+select{
+    display: block;
+    width: 325px;
+    margin: 10px auto;
+    padding: 10px;
+    border: 1px solid #d4c5a6;
+    border-radius: 5px;
+    background-color: #fffdfa; /* Slightly off-white */
+    font-size: 14px;
+    font-family: 'Georgia', serif;
+}
 input:focus, textarea:focus, select:focus {
     outline: none;
     border-color: #8b5e3c;
     box-shadow: 0 0 5px rgba(139, 94, 60, 0.5);
+    font-family: 'Georgia', serif;
 }
 
 /* Footer */
@@ -112,6 +134,7 @@ footer {
     color: white;
     font-size: 14px;
     margin-top: 30px;
+    font-family: 'Georgia', serif;
 }
 
 /* Logo */
@@ -124,4 +147,5 @@ footer {
 #library-container {
     padding-top: 1px; /* Adjust padding for a smaller appearance */
     padding-bottom: 1px;
+    font-family: 'Georgia', serif;
 }
