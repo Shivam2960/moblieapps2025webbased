@@ -3,11 +3,9 @@ const supabaseURL = "https://jidvjencxztuercjskgw.supabase.co";
 const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImppZHZqZW5jeHp0dWVyY2pza2d3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjQwNzEzNTEsImV4cCI6MjAzOTY0NzM1MX0.bmWEAB5ITALaAvfQ0_0ohephLy6_O5YbLpLuTRHaeRU";
 const supabase = createClient(supabaseURL, supabaseAnonKey);
 
-const updateButton = document.getElementById('update-btn');
 const firstNameInput = document.getElementById('first-name');
 const lastNameInput = document.getElementById('last-name');
 const cityInput = document.getElementById('city');
-const libraryNameInput = document.getElementById('library-name');
 const errorMsg = document.getElementById('error-msg');
 
 async function getSession() {
@@ -32,11 +30,11 @@ async function updateUserProfile(session) {
     // Step 2: Handle errors or missing user data
     if (fetchError) {
         console.log('Error fetching user data: ', fetchError);
-        errorMsg.innerHTML = "Error fetching user data.";
+        errorMsg.textContent = "Error fetching user data.";
         return;
     }
     if (!userData) {
-        errorMsg.innerHTML = "User not found.";
+        errorMsg.textContent = "User not found.";
         return;
     }
 
@@ -55,10 +53,10 @@ async function updateUserProfile(session) {
             firstname: firstNameInput.value,
             lastname: lastNameInput.value,
             city: cityInput.value,
-            libraryName: libraryNameInput.value,
+            libraryName: document.getElementById('library-name')?.value || '',
         };
     } else {
-        errorMsg.innerHTML = "Invalid account type.";
+        errorMsg.textContent = "Invalid account type.";
         return;
     }
 
@@ -71,19 +69,26 @@ async function updateUserProfile(session) {
     // Step 5: Handle the update result
     if (error) {
         console.log('Error updating user data: ', error);
-        errorMsg.innerHTML = "Error updating profile.";
+        errorMsg.textContent = "Error updating profile.";
         return;
     }
 
     console.log('Update result: ', data);
-    errorMsg.innerHTML = "Profile updated successfully!";
+    errorMsg.textContent = "Profile updated successfully!";
 }
 
-updateButton.addEventListener('click', async () => {
-    const session = await getSession();
-    if (session) {
-        updateUserProfile(session);
-    } else {
-        errorMsg.innerHTML = "No active session. Please log in.";
+// Update event listener to handle form submission
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('updateProfileForm');
+    if (form) {
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const session = await getSession();
+            if (session) {
+                await updateUserProfile(session);
+            } else {
+                errorMsg.textContent = "No active session. Please log in.";
+            }
+        });
     }
 });

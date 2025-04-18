@@ -3,19 +3,16 @@ const supabaseURL = "https://jidvjencxztuercjskgw.supabase.co";
 const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImppZHZqZW5jeHp0dWVyY2pza2d3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjQwNzEzNTEsImV4cCI6MjAzOTY0NzM1MX0.bmWEAB5ITALaAvfQ0_0ohephLy6_O5YbLpLuTRHaeRU";
 const supabase = createClient(supabaseURL, supabaseAnonKey);
 
-// Populate dropdown on page load
 async function populateDropdown() {
     const select = document.getElementById("removeitemname");
-    select.innerHTML = ""; // Clear existing options
+    select.innerHTML = '<option value="">Select a book to remove</option>'; // Reset with default
 
     try {
-        // Get current session
         const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
         if (sessionError) throw sessionError;
         if (!sessionData.session) throw new Error("No active session found.");
         const userId = sessionData.session.user.id;
 
-        // Fetch Library_Stock from Supabase
         const { data, error } = await supabase
             .from("table2")
             .select("Library_Stock")
@@ -26,23 +23,16 @@ async function populateDropdown() {
 
         const libraryStock = data.Library_Stock || [];
 
-        // Handle empty library
-        if (libraryStock.length === 0) {
-            const option = document.createElement("option");
-            option.textContent = "No books in library";
-            option.disabled = true;
-            select.appendChild(option);
-            return;
+        // Add books if available
+        if (libraryStock.length > 0) {
+            const uniqueBooks = [...new Set(libraryStock)];
+            uniqueBooks.forEach(book => {
+                const option = document.createElement("option");
+                option.value = book;
+                option.textContent = book;
+                select.appendChild(option);
+            });
         }
-
-        // Populate dropdown with unique book names
-        const uniqueBooks = [...new Set(libraryStock)]; // Remove duplicates
-        uniqueBooks.forEach(book => {
-            const option = document.createElement("option");
-            option.value = book;
-            option.textContent = book;
-            select.appendChild(option);
-        });
     } catch (err) {
         console.error("Error populating dropdown:", err);
         document.getElementById("error-msg").textContent = `Error loading books: ${err.message}`;

@@ -3,7 +3,9 @@ const supabaseURL = "https://jidvjencxztuercjskgw.supabase.co";
 const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImppZHZqZW5jeHp0dWVyY2pza2d3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjQwNzEzNTEsImV4cCI6MjAzOTY0NzM1MX0.bmWEAB5ITALaAvfQ0_0ohephLy6_O5YbLpLuTRHaeRU";
 const supabase = createClient(supabaseURL, supabaseKey);
 
-async function addItemToLibrary() {
+async function addItemToLibrary(event) {
+    event.preventDefault(); // Prevent default form submission
+
     const bookName = document.getElementById("newbookname").value.trim();
     const errorMsg = document.getElementById("error-msg");
 
@@ -67,7 +69,7 @@ async function addItemToLibrary() {
             if (updateError) {
                 throw new Error("Update failed: " + updateError.message);
             }
-            errorMsg.textContent = "Book added to arrays!";
+            errorMsg.textContent = "Successfully added a new book!";
         }
     } catch (err) {
         console.error("Error:", err);
@@ -77,4 +79,5 @@ async function addItemToLibrary() {
     document.getElementById("newbookname").value = "";
 }
 
-document.getElementById("additembtn").addEventListener("click", addItemToLibrary);
+// Add event listener to the form instead of the button
+document.getElementById("addItemForm").addEventListener("submit", addItemToLibrary);

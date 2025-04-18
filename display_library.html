@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>Display Data</title>
     <link rel="stylesheet" href="./style.css" type="text/css">
+    <!-- Add Bootstrap Icons CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <style>
         body {
             display: flex;
@@ -26,19 +28,27 @@
         }
         .sidebar h2 {
             text-align: center;
-            font-size: 20px;
+            font-size: 25px;
             margin-bottom: 20px;
         }
         .sidebar a {
             color: #8b5e3c;
             text-decoration: none;
-            display: block;
+            display: flex;
+            align-items: center;
+            gap: 10px;
             padding: 10px;
             border-radius: 5px;
             transition: background-color 0.3s ease;
+            font-size: 15px;
         }
         .sidebar a:hover {
             background-color: #d4c5a6;
+        }
+        .sidebar a.active {
+            background-color: #d4c5a6;
+            font-weight: bold;
+            color: #5d3a1a;
         }
         .main-content {
             margin-left: 270px;
@@ -50,14 +60,30 @@
 <body>
 <div class="sidebar">
     <h2>Navigation</h2>
-    <a href="./additem.html">Add Item</a>
-    <a href="./removeitem.html">Remove Item</a>
-    <a href="./checkitemout.html">Check a Book Out For a Person</a>
-    <a href="./returnitem.html">Change Status of a Book to Returned</a>
-    <a href="./viewProfileLibrary.html">View Profile</a>
-    <a href="./updateLibrary.html">Update Your Profile</a>
-    <a href="./helpLibrary.html">Help</a>
-    <a href="./logout.html">Logout</a>
+    <a href="./additem.html">
+        <i class="bi bi-journal-plus"></i> Add Items
+    </a>
+    <a href="./removeitem.html">
+        <i class="bi bi-journal-minus"></i> Remove Items
+    </a>
+    <a href="./checkitemout.html">
+        <i class="bi bi-journal-arrow-up"></i> Check Items Out
+    </a>
+    <a href="./returnitem.html">
+        <i class="bi bi-journal-arrow-down"></i> Return Items
+    </a>
+    <a href="./viewProfileLibrary.html">
+        <i class="bi bi-person-lines-fill"></i> View Profile
+    </a>
+    <a href="./updateLibrary.html">
+        <i class="bi bi-person-gear"></i> Update Profile
+    </a>
+    <a href="./helpLibrary.html">
+        <i class="bi bi-question-circle"></i> Help
+    </a>
+    <a href="./logout.html">
+        <i class="bi bi-box-arrow-right"></i> Logout
+    </a>
 </div>
 <div class="main-content">
     <div class="container">

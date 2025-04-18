@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Check Item Out</title>
+    <title>Remove Book</title>
     <link rel="stylesheet" href="./style.css" type="text/css">
+    <!-- Add Bootstrap Icons CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <style>
         body {
@@ -59,25 +60,19 @@
 <body>
 <div class="sidebar">
     <h2>Navigation</h2>
-    <a href="./additem.html">
-        <i class="bi bi-journal-plus"></i> Add Items
+    <a href="./add-book.html">
+        <i class="bi bi-journal-plus"></i> Add Books
     </a>
-    <a href="./removeitem.html">
-        <i class="bi bi-journal-minus"></i> Remove Items
+    <a href="./remove-book.html" class="active">
+        <i class="bi bi-journal-minus"></i> Remove Books
     </a>
-    <a href="./checkitemout.html" class="active">
-        <i class="bi bi-journal-arrow-up"></i> Check Items Out
-    </a>
-    <a href="./returnitem.html">
-        <i class="bi bi-journal-arrow-down"></i> Return Items
-    </a>
-    <a href="./viewProfileLibrary.html">
+    <a href="./viewProfileBorrower.html">
         <i class="bi bi-person-lines-fill"></i> View Profile
     </a>
-    <a href="./updateLibrary.html">
+    <a href="./updateBorrower.html">
         <i class="bi bi-person-gear"></i> Update Profile
     </a>
-    <a href="./helpLibrary.html">
+    <a href="./helpBorrower.html">
         <i class="bi bi-question-circle"></i> Help
     </a>
     <a href="./logout.html">
@@ -86,21 +81,14 @@
 </div>
 <div class="main-content">
     <div class="container">
-        <h2>Check an Item Out</h2>
-        <form id="checkoutForm">
-            <select id="checkoutitemname" required>
-                <option value="">Select an item to check out</option>
-            </select>
-            <input id="dueDate" type="date" required>
-            <input id="checkoutpersonname" placeholder="Name of Person" required>
-            <input type="tel" id="checkoutpersonPN" placeholder="Phone Number of Person" required>
-            <button type="submit" id="checkitemout">Check Out Item</button>
-        </form>
+        <h2>Remove Borrowed Book</h2>
+        <select id="bookDropdown"></select>
+        <button id="removeButton">Remove Book</button>
         <p id="error-msg"></p>
-        <a href="./display_library.html">View List</a>
+        <a href="display_borrower.html">View List</a>
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="./checkitemout.js"></script>
+<script type="module" src="./remove-book.js"></script>
 </body>
 </html>

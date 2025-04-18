@@ -9,14 +9,60 @@
 <div class="container">
     <img src="./logo.png" alt="Library Logo" class="logo">
     <h2>Login to the Library Website</h2>
-    <input type="email" id="email" placeholder="Email" required>
-    <input type="password" id="password" placeholder="Password" required>
-    <button id="loginBtn">Login</button>
+    <form id="loginForm">
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <button type="submit" id="loginBtn">Login</button>
+    </form>
     <p id="error-msg"></p>
     <a href="./accountype.html">Don't have an account? Sign up.</a><br>
     <a href="./index.html">Go back to view features.</a>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="./auth.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const { createClient } = window.supabase;
+        const supabaseURL = "https://jidvjencxztuercjskgw.supabase.co";
+        const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImppZHZqZW5jeHp0dWVyY2pza2d3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjQwNzEzNTEsImV4cCI6MjAzOTY0NzM1MX0.bmWEAB5ITALaAvfQ0_0ohephLy6_O5YbLpLuTRHaeRU";
+        const supabase = createClient(supabaseURL, supabaseAnonKey);
+
+        document.getElementById("loginForm")?.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            const errorMsg = document.getElementById("error-msg");
+
+            try {
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email,
+                    password
+                });
+
+                if (error) throw error;
+
+                // Get account type after successful login
+                const { data: userData, error: userError } = await supabase
+                    .from('table2')
+                    .select('accountType')
+                    .eq('email', email)
+                    .single();
+
+                if (userError) throw userError;
+
+                // Redirect based on account type
+                if (userData.accountType === "Library Account") {
+                    window.location.href = "display_library.html";
+                } else if (userData.accountType === "Borrower Account") {
+                    window.location.href = "display_borrower.html";
+                } else {
+                    errorMsg.textContent = "Unknown account type";
+                }
+            } catch (error) {
+                errorMsg.textContent = error.message;
+            }
+        });
+    });
+</script>
 </body>
 </html>

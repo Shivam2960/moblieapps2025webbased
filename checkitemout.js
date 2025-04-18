@@ -6,16 +6,14 @@ const supabase = createClient(supabaseURL, supabaseAnonKey);
 // Function to populate dropdown with In_Stock items
 async function populateCheckoutDropdown() {
     const select = document.getElementById("checkoutitemname");
-    select.innerHTML = ""; // Clear existing options
+    select.innerHTML = '<option value="">Select an item to check out</option>'; // Reset with default
 
     try {
-        // Get user session
         const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
         if (sessionError) throw sessionError;
         if (!sessionData.session) throw new Error("No active session found.");
         const userId = sessionData.session.user.id;
 
-        // Fetch In_Stock from Supabase
         const { data, error } = await supabase
             .from("table2")
             .select("In_Stock")
@@ -26,36 +24,29 @@ async function populateCheckoutDropdown() {
 
         const inStockItems = data.In_Stock || [];
 
-        // Handle empty stock
-        if (inStockItems.length === 0) {
-            const option = document.createElement("option");
-            option.textContent = "No items available";
-            option.disabled = true;
-            select.appendChild(option);
-            return;
+        // Only populate items if available
+        if (inStockItems.length > 0) {
+            inStockItems.forEach(item => {
+                const option = document.createElement("option");
+                option.value = item;
+                option.textContent = item;
+                select.appendChild(option);
+            });
         }
-
-        // Populate dropdown with all in-stock items
-        inStockItems.forEach(item => {
-            const option = document.createElement("option");
-            option.value = item;
-            option.textContent = item;
-            select.appendChild(option);
-        });
     } catch (err) {
         console.error("Error populating dropdown:", err);
         document.getElementById("error-msg").textContent = `Error loading items: ${err.message}`;
     }
 }
 
-// Existing formatDate function remains the same
 function formatDateToMMDDYYYY(dateString) {
     const [year, month, day] = dateString.split('-');
     return `${month}-${day}-${year}`;
 }
 
-// Modified checkOutItem function with dropdown refresh
-async function checkOutItem() {
+async function checkOutItem(event) {
+    if (event) event.preventDefault(); // Prevent default form submission
+
     const itemName = document.getElementById("checkoutitemname").value.trim();
     const dueDate = document.getElementById("dueDate").value.trim();
     const personName = document.getElementById("checkoutpersonname").value.trim();
@@ -70,7 +61,6 @@ async function checkOutItem() {
     errorMsg.textContent = "";
 
     try {
-        // Existing checkout logic remains the same
         const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
         if (sessionError) throw sessionError;
         if (!sessionData.session) throw new Error("No active session found.");
@@ -88,7 +78,6 @@ async function checkOutItem() {
         let currentInStockItems = data.In_Stock || [];
         let currentBorrowedItems = data.borrowed_info || [];
 
-        // Validation check remains
         if (!currentInStockItems.includes(itemName)) {
             errorMsg.textContent = "Error: Item is no longer available.";
             return;
@@ -116,7 +105,7 @@ async function checkOutItem() {
         document.getElementById("checkoutpersonname").value = "";
         document.getElementById("checkoutpersonPN").value = "";
         errorMsg.textContent = "Item checked out successfully!";
-        await populateCheckoutDropdown(); // Refresh the dropdown
+        await populateCheckoutDropdown();
     } catch (err) {
         console.error("Error:", err);
         errorMsg.textContent = `Error: ${err.message}`;
@@ -125,6 +114,9 @@ async function checkOutItem() {
 
 // Initialize event listeners
 document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById("checkitemout").addEventListener("click", checkOutItem);
-    populateCheckoutDropdown(); // Populate on initial load
+    const form = document.getElementById("checkoutForm");
+    if (form) {
+        form.addEventListener("submit", checkOutItem);
+    }
+    populateCheckoutDropdown();
 });
