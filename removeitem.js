@@ -13,31 +13,37 @@ async function populateDropdown() {
         if (!sessionData.session) throw new Error("No active session found.");
         const userId = sessionData.session.user.id;
 
+        // Get both Library_Stock and borrowed_info
         const { data, error } = await supabase
             .from("table2")
-            .select("Library_Stock")
+            .select("Library_Stock, borrowed_info")
             .eq("id", userId)
             .single();
 
         if (error) throw error;
 
         const libraryStock = data.Library_Stock || [];
+        const borrowedInfo = data.borrowed_info || [];
 
-        // Add books if available
+        // Add books with borrowed status
         if (libraryStock.length > 0) {
             const uniqueBooks = [...new Set(libraryStock)];
             uniqueBooks.forEach(book => {
                 const option = document.createElement("option");
                 option.value = book;
-                option.textContent = book;
+                // Check if book is in borrowed_info
+                const isBorrowed = borrowedInfo.some(entry => entry.startsWith(book));
+                option.textContent = isBorrowed ? `(Borrowed) ${book}` : book;
                 select.appendChild(option);
             });
         }
     } catch (err) {
         console.error("Error populating dropdown:", err);
+        errorMsg.style.color = "#d32f2f";
         document.getElementById("error-msg").textContent = `Error loading books: ${err.message}`;
     }
 }
+
 
 // Remove item function with dropdown refresh
 async function removeItemFromLibrary() {
@@ -45,6 +51,7 @@ async function removeItemFromLibrary() {
     const errorMsg = document.getElementById("error-msg");
 
     if (!bookName) {
+        errorMsg.style.color = "#d32f2f";
         errorMsg.textContent = "Please select a book from the dropdown.";
         return;
     }
@@ -89,10 +96,12 @@ async function removeItemFromLibrary() {
         if (updateError) throw updateError;
 
         // Refresh dropdown and clear selection
+        errorMsg.style.color = "#2e7d32";
         errorMsg.textContent = "Book removed successfully from all records!";
         await populateDropdown();
     } catch (err) {
         console.error("Error:", err);
+        errorMsg.style.color = "#d32f2f";
         errorMsg.textContent = `Error: ${err.message}`;
     }
 }

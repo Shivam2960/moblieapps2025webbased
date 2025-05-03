@@ -35,6 +35,7 @@ async function populateReturnDropdown() {
         }
     } catch (err) {
         console.error("Error populating dropdown:", err);
+        errorMsg.style.color = "#d32f2f";
         document.getElementById("error-msg").textContent = `Error loading borrowed items: ${err.message}`;
     }
 }
@@ -47,6 +48,7 @@ async function returnItem() {
     const errorMsg = document.getElementById("error-msg");
 
     if (!selectedEntry) {
+        errorMsg.style.color = "#d32f2f";
         errorMsg.textContent = "Please select an item to return.";
         return;
     }
@@ -99,6 +101,7 @@ async function returnItem() {
         if (updateError) throw updateError;
 
         // Clear selection and refresh dropdown
+        errorMsg.style.color = "#2e7d32";
         errorMsg.textContent = `"${itemName}" has been successfully returned!`;
         await populateReturnDropdown();
     } catch (err) {

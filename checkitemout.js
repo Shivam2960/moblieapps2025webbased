@@ -35,6 +35,7 @@ async function populateCheckoutDropdown() {
         }
     } catch (err) {
         console.error("Error populating dropdown:", err);
+        errorMsg.style.color = "#d32f2f";
         document.getElementById("error-msg").textContent = `Error loading items: ${err.message}`;
     }
 }
@@ -45,7 +46,7 @@ function formatDateToMMDDYYYY(dateString) {
 }
 
 async function checkOutItem(event) {
-    if (event) event.preventDefault(); // Prevent default form submission
+    if (event) event.preventDefault();
 
     const itemName = document.getElementById("checkoutitemname").value.trim();
     const dueDate = document.getElementById("dueDate").value.trim();
@@ -53,8 +54,18 @@ async function checkOutItem(event) {
     const phoneNumber = document.getElementById("checkoutpersonPN").value.trim();
     const errorMsg = document.getElementById("error-msg");
 
+    // Validate all fields
     if (!itemName || !dueDate || !personName || !phoneNumber) {
+        errorMsg.style.color = "#d32f2f";
         errorMsg.textContent = "Please fill out all fields.";
+        return;
+    }
+
+    // Validate phone number format
+    const formattedPN = formatPhoneNumber(phoneNumber);
+    if (!formattedPN) {
+        errorMsg.style.color = "#d32f2f";
+        errorMsg.textContent = "Invalid phone number format. Example: 123-456-7890";
         return;
     }
 
@@ -79,6 +90,7 @@ async function checkOutItem(event) {
         let currentBorrowedItems = data.borrowed_info || [];
 
         if (!currentInStockItems.includes(itemName)) {
+            errorMsg.style.color = "#d32f2f";
             errorMsg.textContent = "Error: Item is no longer available.";
             return;
         }
@@ -86,10 +98,12 @@ async function checkOutItem(event) {
         // Update arrays
         currentInStockItems = currentInStockItems.filter(item => item !== itemName);
         const formattedDueDate = formatDateToMMDDYYYY(dueDate);
-        const checkoutDetails = `${itemName} By: ${personName} Due: ${formattedDueDate} PN: ${phoneNumber}`;
-        currentBorrowedItems.push(checkoutDetails);
+        const checkoutDetails = `${itemName} By: ${personName} Due: ${formattedDueDate} PN: ${formattedPN}`;
 
-        // Update Supabase
+// Add this line to push the new checkout details to the array
+        currentBorrowedItems.push(checkoutDetails); // <--- THIS IS MISSING
+
+// Update Supabase
         const { error: updateError } = await supabase
             .from("table2")
             .update({
@@ -104,6 +118,7 @@ async function checkOutItem(event) {
         document.getElementById("dueDate").value = "";
         document.getElementById("checkoutpersonname").value = "";
         document.getElementById("checkoutpersonPN").value = "";
+        errorMsg.style.color = "#2e7d32";
         errorMsg.textContent = "Item checked out successfully!";
         await populateCheckoutDropdown();
     } catch (err) {
@@ -120,3 +135,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     populateCheckoutDropdown();
 });
+
+function formatPhoneNumber(phoneNumberString) {
+    const cleaned = ('' + phoneNumberString).replace(/\D/g, '');
+    const match = cleaned.match(/^(1|)?(\d{3})(\d{3})(\d{4})$/);
+    if (match) {
+        const intlCode = match[1] ? '+1 ' : '';
+        return `${intlCode}(${match[2]}) ${match[3]}-${match[4]}`;
+    }
+    return null;
+}
